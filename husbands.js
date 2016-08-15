@@ -1,4 +1,4 @@
-var participants = [
+var husbands = [
     {
       "id": 1,
       "name": "Svejk",
@@ -15,3 +15,5 @@ var participants = [
       "priority_list": [3, 2, 1]
     }
   ]
+
+module.exports = husbands;

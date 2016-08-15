@@ -1,4 +1,4 @@
-var companies = [
+var wives = [
     {
       "id": 1,
       "name": "vidampark",
@@ -18,3 +18,5 @@ var companies = [
       "participants_number": 1
     }
 ]
+
+module.exports = wives;
