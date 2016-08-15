@@ -1,0 +1,29 @@
+{
+  "name": "stablemarriage",
+  "version": "1.0.0",
+  "description": "aquamarine stable marriage project",
+  "main": "",
+  "scripts": {
+    "test": "",
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greenfox-academy/stable-marriage"
+  },
+  "author": "aquamarine project team",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^1.2.0",
+    "eslint-plugin-react": "^5.2.2",
+    "tape": "^4.6.0"
+  }
+}
