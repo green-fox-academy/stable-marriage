@@ -5,26 +5,34 @@ var unengagedMen = [];
 var engagements = [];
 var nextCandidateIndex = [];
 
-function createOneItemList(identifier) {
-  return [ { name: identifier } ];
-}
+var preprocess = (function () {
 
-function createIndexedItems(identifier, indexValue) {
-  return [ { name: identifier, index: indexValue } ];
-}
-
-function createUnengagedMen() {
-  for (var i = 0; i < husbands.length; ++i) {
-    unengagedMen.push(createOneItemList(husbands[i].name));
+  function createOneItemList(identifier) {
+    return [ { name: identifier } ];
   }
-}
 
-createUnengagedMen();
-
-function createNextCandidateIndex() {
-  for (var i = 0; i < husbands.length; ++i) {
-    nextCandidateIndex.push(createIndexedItems(husbands[i].name, 0));
+  function createIndexedItems(identifier, indexValue) {
+    return [ { name: identifier, index: indexValue } ];
   }
-}
 
-createNextCandidateIndex();
+  function createUnengagedMen() {
+    for (var i = 0; i < husbands.length; ++i) {
+      unengagedMen.push(createOneItemList(husbands[i].name));
+    }
+  }
+
+  function createNextCandidateIndex() {
+    for (var i = 0; i < husbands.length; ++i) {
+      nextCandidateIndex.push(createIndexedItems(husbands[i].name, 0));
+    }
+  }
+
+  return {
+    createOneItemList: createOneItemList,
+    createIndexedItems: createIndexedItems,
+    createUnengagedMen: createUnengagedMen,
+    createNextCandidateIndex: createNextCandidateIndex
+  }
+}) ();
+
+module.exports = preprocess;
