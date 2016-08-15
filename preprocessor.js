@@ -32,3 +32,11 @@ function createNextCandidateIndex() {
 }
 
 createNextCandidateIndex();
+
+module.exports = {
+  createOneItemList: createOneItemList,
+  createIndexedItems: createIndexedItems,
+  createFourItemsList: createFourItemsList,
+  createUnengagedMen: createUnengagedMen,
+  createNextCandidateIndex: createNextCandidateIndex
+}
