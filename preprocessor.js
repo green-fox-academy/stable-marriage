@@ -15,6 +15,10 @@ var preprocess = (function () {
     return [ { name: identifier, index: indexValue } ];
   }
 
+  function createFourItemsList(company, companyIndex, student, studentIndex) {
+    return [ { companyName: company, companyPreferenceAt: companyIndex, studentName: student, studentPreferenceAt: studentIndex } ];
+  }
+
   function createUnengagedMen() {
     for (var i = 0; i < husbands.length; ++i) {
       unengagedMen.push(createOneItemList(husbands[i].name));
@@ -30,6 +34,7 @@ var preprocess = (function () {
   return {
     createOneItemList: createOneItemList,
     createIndexedItems: createIndexedItems,
+    createFourItemsList: createFourItemsList,
     createUnengagedMen: createUnengagedMen,
     createNextCandidateIndex: createNextCandidateIndex
   }
