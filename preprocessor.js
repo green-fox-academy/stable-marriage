@@ -5,7 +5,7 @@ var unengagedMen = [];
 var engagements = [];
 var nextCandidateIndex = [];
 
-var preprocess = (function () {
+var preprocessor = (function () {
 
   function createOneItemList(identifier) {
     return [ { name: identifier } ];
@@ -20,7 +20,7 @@ var preprocess = (function () {
   }
 
   function createProposers() {
-    
+
   }
 
   function createUnengagedMen() {
@@ -43,3 +43,5 @@ var preprocess = (function () {
     createNextCandidateIndex: createNextCandidateIndex
   }
 }) ();
+
+module.exports = preprocessor;
