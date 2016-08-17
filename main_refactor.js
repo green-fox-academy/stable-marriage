@@ -17,55 +17,51 @@ function createFourItemsList(proposer, proposerIndex, receiver, receiverIndex) {
   return [ { proposerID: proposer, proposerPreferenceAt: proposerIndex, receiverID: receiver, receiverPreferenceAt: receiverIndex } ];
 }
 
-var unengagedproposers = [];
-var proposers = [];
-var receivers = [];
 var engagements = [];
-var nextCandidateIndex = [];
 
-function createProposers(){
-  for (var i = 0; i < originalProposers.length; ++i) {
-    proposers.push(createTwoItemsList(originalProposers[i].id, originalProposers[i].priority_list));
-  }
-}
+var proposers = originalProposers.map(function(proposer) {
+  return createTwoItemsList(proposer.id, proposer.priority_list);
+});
 
-createProposers()
+var receivers = originalReceivers.map(function(receiver) {
+  return createTwoItemsList(receiver.id, receiver.priority_list);
+});
 
-function createReceivers(){
-  for (var i = 0; i < originalReceivers.length; ++i) {
-    receivers.push(createTwoItemsList(originalReceivers[i].id, originalReceivers[i].priority_list));
-  }
-}
+var unengagedProposers = proposers.map(function(proposer) {
+  return createOneItemList(proposer[0].ID);
+});
 
-createReceivers()
-
-function createUnengagedproposers() {
-  for (var i = 0; i < proposers.length; ++i) {
-    unengagedproposers.push(createOneItemList(proposers[i][0].ID));
-  }
-  return unengagedproposers;
-};
-
-createUnengagedproposers();
-
-function createNextCandidateIndex() {
-  for (var i = 0; i < proposers.length; ++i) {
-    nextCandidateIndex.push(createIndexedItems(proposers[i][0].ID, 0));
-  }
-  return nextCandidateIndex;
-};
-
-createNextCandidateIndex();
+var nextCandidateIndex = proposers.map(function(proposer) {
+  return createIndexedItems(proposer[0].ID, 0);
+});
 
 function isUnengagedproposerLeft() {
-  return unengagedproposers.length > 0;
+  return unengagedProposers.length > 0;
 };
 
 function getCurrentUnengagedproposer() {
-  var proposerID = unengagedproposers[0][0].ID;
-  unengagedproposers.shift();
+  var proposerID = unengagedProposers[0][0].ID;
+  unengagedProposers.shift();
   return proposerID;
+}
+
+function checkCurrentCandidateIndex(proposerID) {
+  if (nextCandidateIndex[j][0].ID == proposerID) {
+    currentCandidateIndex = nextCandidateIndex[j][0].index;
+    break;
+  }
 };
+
+function getCurrentCandidateIndex (proposerID) {
+  var currentCandidateIndex = -1;
+  for (var j = 0; j < nextCandidateIndex.length; ++j) {
+    if (nextCandidateIndex[j][0].ID == proposerID) {
+      currentCandidateIndex = nextCandidateIndex[j][0].index;
+      break;
+    }
+  }
+  return currentCandidateIndex;
+}
 
 function getCurrentCandidateIndex (proposerID) {
   var currentCandidateIndex = -1;
@@ -130,7 +126,7 @@ function getMarriedreceiverIndex(receiverID) {
 };
 
 function unengageproposer(proposerID){
-  unengagedproposers.push(createOneItemList(proposerID));
+  unengagedProposers.push(createOneItemList(proposerID));
   incrementCurrentCandidateIndex(proposerID);
 }
 
