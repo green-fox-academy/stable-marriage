@@ -37,7 +37,7 @@ var nextCandidateIndex = proposers.map(function(proposer) {
 
 function isUnengagedproposerLeft() {
   return unengagedProposers.length > 0;
-};
+}
 
 function getCurrentUnengagedproposer() {
   var proposerID = unengagedProposers[0][0].ID;
@@ -45,54 +45,30 @@ function getCurrentUnengagedproposer() {
   return proposerID;
 }
 
-function checkCurrentCandidateIndex(proposerID) {
-  if (nextCandidateIndex[j][0].ID == proposerID) {
-    currentCandidateIndex = nextCandidateIndex[j][0].index;
-    break;
-  }
-};
-
-function getCurrentCandidateIndex (proposerID) {
+function getCurrentCandidateIndex(proposerID) {
   var currentCandidateIndex = -1;
-  for (var j = 0; j < nextCandidateIndex.length; ++j) {
-    if (nextCandidateIndex[j][0].ID == proposerID) {
-      currentCandidateIndex = nextCandidateIndex[j][0].index;
-      break;
-    }
-  }
-  return currentCandidateIndex;
-}
-
-function getCurrentCandidateIndex (proposerID) {
-  var currentCandidateIndex = -1;
-  for (var j = 0; j < nextCandidateIndex.length; ++j) {
-    if (nextCandidateIndex[j][0].ID == proposerID) {
-      currentCandidateIndex = nextCandidateIndex[j][0].index;
-      break;
-    }
-  }
+  var toFind = nextCandidateIndex.filter(function(listItem) {
+    return listItem[0].ID === proposerID;
+  });
+  currentCandidateIndex = toFind[0][0].index;
   return currentCandidateIndex;
 }
 
 function incrementCurrentCandidateIndex(proposerID) {
-  for (var j = 0; j < nextCandidateIndex.length; ++j) {
-    if (nextCandidateIndex[j][0].ID == proposerID) {
-      ++nextCandidateIndex[j][0].index;
-      break;
-    }
-  }
+  var toIncrement = nextCandidateIndex.filter(function(listItem) {
+    return listItem[0].ID === proposerID;
+  });
+  return ++toIncrement[0][0].index;
 }
 
 function getCurrentCandidate(proposerID, currentCandidateIndex) {
   var currentCandidate = 'Undefined';
-  for (var j = 0; j < proposers.length; ++j) {
-    if (proposers[j][0].ID == proposerID) {
-      currentCandidate = proposers[j][0].preferenceList[currentCandidateIndex];
-      break;
-    }
-  }
+  var currentObject = proposers.filter(function(listItem) {
+    return listItem[0].ID === proposerID;
+  });
+  currentCandidate = currentObject[0][0].preferenceList[currentCandidateIndex];
   return currentCandidate;
-};
+}
 
 function getreceiverPreferredIndex (receiverID, proposerID) {
   for (var j = 0; j < receivers.length; ++j) {
