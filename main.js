@@ -2,30 +2,28 @@ var originalProposers = require('./proposers.js');
 var originalReceivers = require('./receivers.js');
 
 function createOneItemList(identifier) {
-  return [ { id: identifier } ];
+  return [ { ID: identifier } ];
 }
 
 function createTwoItemsList(identifier, list) {
-  return [ { id: identifier, preferenceList: list } ];
+  return [ { ID: identifier, preferenceList: list } ];
 }
 
 function createIndexedItems(identifier, indexValue) {
-  return [ { id: identifier, index: indexValue } ];
+  return [ { ID: identifier, index: indexValue } ];
 }
 
 function createFourItemsList(proposer, proposerIndex, receiver, receiverIndex) {
-  return [ { proposerid: proposer, proposerPreferenceAt: proposerIndex, receiverid: receiver, receiverPreferenceAt: receiverIndex } ];
+  return [ { proposerID: proposer, proposerPreferenceAt: proposerIndex, receiverID: receiver, receiverPreferenceAt: receiverIndex } ];
 }
 
-var unengagedProposers = [];
+var unengagedproposers = [];
 var proposers = [];
 var receivers = [];
 var engagements = [];
 var nextCandidateIndex = [];
 
-// ***************create lists****************************
-
-function createProposers() {
+function createProposers(){
   for (var i = 0; i < originalProposers.length; ++i) {
     proposers.push(createTwoItemsList(originalProposers[i].id, originalProposers[i].priority_list));
   }
@@ -33,7 +31,7 @@ function createProposers() {
 
 createProposers()
 
-function createReceivers() {
+function createReceivers(){
   for (var i = 0; i < originalReceivers.length; ++i) {
     receivers.push(createTwoItemsList(originalReceivers[i].id, originalReceivers[i].priority_list));
   }
@@ -41,144 +39,138 @@ function createReceivers() {
 
 createReceivers()
 
-function createunengagedProposers() {
+function createUnengagedproposers() {
   for (var i = 0; i < proposers.length; ++i) {
-    unengagedProposers.push(createOneItemList(proposers[i][0].id));
+    unengagedproposers.push(createOneItemList(proposers[i][0].ID));
   }
-  return unengagedProposers;
+  return unengagedproposers;
 };
 
-createunengagedProposers();
+createUnengagedproposers();
 
 function createNextCandidateIndex() {
   for (var i = 0; i < proposers.length; ++i) {
-    nextCandidateIndex.push(createIndexedItems(proposers[i][0].id, 0));
+    nextCandidateIndex.push(createIndexedItems(proposers[i][0].ID, 0));
   }
   return nextCandidateIndex;
 };
 
 createNextCandidateIndex();
 
-// ********************************************************
-
 function isUnengagedproposerLeft() {
-  return unengagedProposers.length > 0;
-}
+  return unengagedproposers.length > 0;
+};
 
 function getCurrentUnengagedproposer() {
-  var proposerid = unengagedProposers[0][0].id;
-  unengagedProposers.shift();
-  return proposerid;
-}
+  var proposerID = unengagedproposers[0][0].ID;
+  unengagedproposers.shift();
+  return proposerID;
+};
 
-function getCurrentCandidateIndex(proposerid) {
+function getCurrentCandidateIndex (proposerID) {
   var currentCandidateIndex = -1;
-  for (var i = 0; i < nextCandidateIndex.length; ++i) {
-    if (nextCandidateIndex[i][0].id = proposerid) {
-      currentCandidateIndex = nextCandidateIndex[i][0].index;
+  for (var j = 0; j < nextCandidateIndex.length; ++j) {
+    if (nextCandidateIndex[j][0].ID == proposerID) {
+      currentCandidateIndex = nextCandidateIndex[j][0].index;
       break;
     }
   }
   return currentCandidateIndex;
 }
 
-function incrementCurrentCandidateIndex(proposerid) {
-  for (var i = 0; i < nextCandidateIndex.length; ++i) {
-    if (nextCandidateIndex[i][0].id == proposerid) {
-      ++nextCandidateIndex[i][0].index;
+function incrementCurrentCandidateIndex(proposerID) {
+  for (var j = 0; j < nextCandidateIndex.length; ++j) {
+    if (nextCandidateIndex[j][0].ID == proposerID) {
+      ++nextCandidateIndex[j][0].index;
       break;
     }
   }
-};
+}
 
-function getCurrentCandidate(proposerid) {
+function getCurrentCandidate(proposerID, currentCandidateIndex) {
   var currentCandidate = 'Undefined';
-  var currentCandidateIndex = getCurrentCandidateIndex(proposerid);
-  for (var i = 0; i < proposers.length; ++i) {
-    if (proposers[i][0].id == proposerid) {
-      currentCandidate = proposers[i][0].preferenceList[currentCandidateIndex];
+  for (var j = 0; j < proposers.length; ++j) {
+    if (proposers[j][0].ID == proposerID) {
+      currentCandidate = proposers[j][0].preferenceList[currentCandidateIndex];
       break;
     }
   }
   return currentCandidate;
-}
+};
 
-function getreceiverPrefersproposerAtIndex(proposerid) {
-  var receiverPrefersproposerAtIndex = -1;
-  var receiver = getCurrentCandidate(proposerid);
-  for (var i = 0; i < receivers.length; ++i) {
-    if (receivers[i][0].id == receiver) {
-      receiverPrefersproposerAtIndex = receivers[i][0].preferenceList.indexOf(proposerid);
-      break;
+function getreceiverPreferredIndex (receiverID, proposerID) {
+  for (var j = 0; j < receivers.length; ++j) {
+    if (receivers[j][0].ID == receiverID) {
+      for (var i = 0; i < receivers[j][0].preferenceList.length; ++i) {
+        if (receivers[j][0].preferenceList[i] == proposerID) {
+          return i;
+        }
+      }
     }
   }
-  return receiverPrefersproposerAtIndex;
+  return -1;
 }
 
-function isreceiverEngaged(receiver) {
-  for (var i = 0; i < engagements.length; ++i) {
-    if (engagements[i][0].receiverid == receiver) {
+function isEngaged (currentCandidate) {
+  for (var j = 0; j < engagements.length; ++j) {
+    if (engagements[j][0].receiverID == currentCandidate) {
       return true;
-    } else {
-      return false;
     }
   }
+  return false;
+};
+
+function getMarriedreceiverIndex(receiverID) {
+  for (var j = 0; j < engagements.length; ++j) {
+    if (engagements[j][0].receiverID == receiverID) {
+      return engagements[j][0].receiverPreferenceAt;
+    }
+  }
+  return -1;
+};
+
+function unengageproposer(proposerID){
+  unengagedproposers.push(createOneItemList(proposerID));
+  incrementCurrentCandidateIndex(proposerID);
 }
 
-function getMarriedreceiverIndex(receiver) {
-  var receiverPreferenceAt = -1;
-  for (var i = 0; i < engagements.length; ++i) {
-    if (engagements[i][0].receiverid == receiver) {
-      receiverPreferenceAt = engagements[i][0].receiverPreferenceAt;
+function reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
+  for (var j = 0; j < engagements.length; ++j) {
+    if (engagements[j][0].receiverID == currentCandidate) {
+      unengageproposer(engagements[j][0].proposerID);
+      engagements[j][0].proposerID = proposerID;
+      engagements[j][0].proposerPreferenceAt = currentCandidateIndex;
+      engagements[j][0].receiverPreferenceAt = receiverPreferredIndex;
       break;
     }
   }
-  return receiverPreferenceAt;
 }
 
-function setproposerBackOnMarket(proposerid) {
-  unengagedProposers.push(createOneItemList(proposerid));
-  incrementCurrentCandidateIndex(proposerid);
-}
-
-function reEngage(newproposerid, proposerPreferenceAt, currentCandidate, receiverPreferenceAt) {
-  for (var i = 0; i < engagements.length; ++i) {
-    if (engagements[i][0].receiverid == currentCandidate) {
-      setproposerBackOnMarket(engagements[i][0].proposerid);
-      engagements[i][0].proposerid = newproposerid;
-      engagements[i][0].proposerPreferenceAt = proposerPreferenceAt;
-      engagements[i][0].receiverPreferenceAt = receiverPreferenceAt;
-      break;
-    }
-  }
-}
-
-function engage(proposerid, proposerPreferenceAt, currentCandidate, receiverPreferenceAt) {
-  if (isreceiverEngaged(currentCandidate)) {
+function engage (proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
+  if (isEngaged(currentCandidate)) {
     var marriedreceiverIndex = getMarriedreceiverIndex(currentCandidate);
-    if (marriedreceiverIndex > receiverPreferenceAt) {
-      reEngage(proposerid, proposerPreferenceAt, currentCandidate, receiverPreferenceAt)
+    if (marriedreceiverIndex > receiverPreferredIndex) {
+      reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex);
     } else {
-      setproposerBackOnMarket(proposerid)
+      unengageproposer(proposerID);
     }
   } else {
-    engagements.push(createFourItemsList(proposerid, proposerPreferenceAt, currentCandidate, receiverPreferenceAt))
+    engagements.push(createFourItemsList(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex));
   }
 }
-// ********************************************************
 
-function solve() {
+function solution () {
   while (isUnengagedproposerLeft()) {
-    var proposerid = getCurrentUnengagedproposer();
-    var proposerPreferenceAt = getCurrentCandidateIndex(proposerid);
-    var currentCandidate = getCurrentCandidate(proposerid);
-    var receiverPreferenceAt = getreceiverPrefersproposerAtIndex(proposerid)
-    engage(proposerid, proposerPreferenceAt, currentCandidate, receiverPreferenceAt)
-    console.log('***********************************************');
+    var proposerID = getCurrentUnengagedproposer();
+    var currentCandidateIndex = getCurrentCandidateIndex(proposerID);
+    var currentCandidate = getCurrentCandidate(proposerID, currentCandidateIndex);
+    var receiverPreferredIndex = getreceiverPreferredIndex(currentCandidate, proposerID);
+    engage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex);
+    console.log('****************************************************');
     for (var i = 0; i < engagements.length; ++i) {
       console.log(engagements[i][0]);
     }
   }
-}
+};
 
-solve();
+solution();
