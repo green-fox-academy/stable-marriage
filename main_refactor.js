@@ -45,11 +45,16 @@ function getCurrentUnengagedproposer() {
   return proposerID;
 }
 
-function getCurrentCandidateIndex(proposerID) {
-  var currentCandidateIndex = -1;
+function searchCurrentCandidateIndex(proposerID) {
   var toFind = nextCandidateIndex.filter(function(listItem) {
     return listItem[0].ID === proposerID;
   });
+  return toFind;
+}
+
+function getCurrentCandidateIndex(proposerID) {
+  var currentCandidateIndex = -1;
+  var toFind = searchCurrentCandidateIndex(proposerID);
   currentCandidateIndex = toFind[0][0].index;
   return currentCandidateIndex;
 }
