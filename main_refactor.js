@@ -88,28 +88,31 @@ function getreceiverPreferredIndex(receiverID, proposerID) {
   return -1;
 }
 
-function isEngaged(currentCandidate) {
-  (engagements.receiverID.indexOf(currentCandidate) !== -1);
+function checkEngagementsList(currentCandidate) {
+  var toFindPref = engagements.filter(function(engagement) {
+    return engagement[0].receiverID === currentCandidate;
+  });
+  return toFindPref;
 }
 
+function isEngaged(currentCandidate) {
+  var toCheck = checkEngagementsList(currentCandidate);
+  if (toCheck.length > 0) {
+    return true;
+  }
+  return false;
+}
 
-
-// function isEngaged(currentCandidate) {
-//   for (var j = 0; j < engagements.length; ++j) {
-//     if (engagements[j][0].receiverID === currentCandidate) {
-//       return true;
-//     }
-//   }
-//   return false;
-// }
+function findMarriedReceiverIndex(receiverID) {
+  var getIndex = engagements.filter(function(engagement) {
+    return engagement[0].receiverID === receiverID;
+  });
+  return getIndex;
+}
 
 function getMarriedreceiverIndex(receiverID) {
-  for (var j = 0; j < engagements.length; ++j) {
-    if (engagements[j][0].receiverID === receiverID) {
-      return engagements[j][0].receiverPreferenceAt;
-    }
-  }
-  return -1;
+  var getPrefIndex = findMarriedReceiverIndex(receiverID);
+  return getPrefIndex[0][0].receiverPreferenceAt;
 }
 
 function unengageproposer(proposerID) {
