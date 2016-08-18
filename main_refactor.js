@@ -75,11 +75,11 @@ function getCurrentCandidate(proposerID, currentCandidateIndex) {
   return currentCandidate;
 }
 
-function getreceiverPreferredIndex (receiverID, proposerID) {
+function getreceiverPreferredIndex(receiverID, proposerID) {
   for (var j = 0; j < receivers.length; ++j) {
-    if (receivers[j][0].ID == receiverID) {
+    if (receivers[j][0].ID === receiverID) {
       for (var i = 0; i < receivers[j][0].preferenceList.length; ++i) {
-        if (receivers[j][0].preferenceList[i] == proposerID) {
+        if (receivers[j][0].preferenceList[i] === proposerID) {
           return i;
         }
       }
@@ -88,32 +88,38 @@ function getreceiverPreferredIndex (receiverID, proposerID) {
   return -1;
 }
 
-function isEngaged (currentCandidate) {
-  for (var j = 0; j < engagements.length; ++j) {
-    if (engagements[j][0].receiverID == currentCandidate) {
-      return true;
-    }
-  }
-  return false;
-};
+function isEngaged(currentCandidate) {
+  (engagements.receiverID.indexOf(currentCandidate) !== -1);
+}
+
+
+
+// function isEngaged(currentCandidate) {
+//   for (var j = 0; j < engagements.length; ++j) {
+//     if (engagements[j][0].receiverID === currentCandidate) {
+//       return true;
+//     }
+//   }
+//   return false;
+// }
 
 function getMarriedreceiverIndex(receiverID) {
   for (var j = 0; j < engagements.length; ++j) {
-    if (engagements[j][0].receiverID == receiverID) {
+    if (engagements[j][0].receiverID === receiverID) {
       return engagements[j][0].receiverPreferenceAt;
     }
   }
   return -1;
-};
+}
 
-function unengageproposer(proposerID){
+function unengageproposer(proposerID) {
   unengagedProposers.push(createOneItemList(proposerID));
   incrementCurrentCandidateIndex(proposerID);
 }
 
 function reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
   for (var j = 0; j < engagements.length; ++j) {
-    if (engagements[j][0].receiverID == currentCandidate) {
+    if (engagements[j][0].receiverID === currentCandidate) {
       unengageproposer(engagements[j][0].proposerID);
       engagements[j][0].proposerID = proposerID;
       engagements[j][0].proposerPreferenceAt = currentCandidateIndex;
@@ -123,10 +129,10 @@ function reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverP
   }
 }
 
-function engage (proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
+function engage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
   if (isEngaged(currentCandidate)) {
     var marriedreceiverIndex = getMarriedreceiverIndex(currentCandidate);
-    if (marriedreceiverIndex > receiverPreferredIndex) {
+    if (receiverPreferredIndex < marriedreceiverIndex) {
       reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex);
     } else {
       unengageproposer(proposerID);
@@ -136,7 +142,7 @@ function engage (proposerID, currentCandidateIndex, currentCandidate, receiverPr
   }
 }
 
-function solution () {
+function solution() {
   while (isUnengagedproposerLeft()) {
     var proposerID = getCurrentUnengagedproposer();
     var currentCandidateIndex = getCurrentCandidateIndex(proposerID);
@@ -148,6 +154,6 @@ function solution () {
       console.log(engagements[i][0]);
     }
   }
-};
+}
 
 solution();
