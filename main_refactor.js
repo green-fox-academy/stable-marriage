@@ -75,17 +75,22 @@ function getCurrentCandidate(proposerID, currentCandidateIndex) {
   return currentCandidate;
 }
 
+function getRecWithPrefInd(receiverID) {
+  var recToFind = receivers.filter(function(receiver) {
+    return receiver[0].ID === receiverID;
+  });
+  return recToFind;
+}
+
+function getFoundRecPrefInd(receiver, proposerID) {
+  var propIndex = receiver[0][0].preferenceList.indexOf(proposerID);
+  return propIndex;
+}
+
 function getreceiverPreferredIndex(receiverID, proposerID) {
-  for (var j = 0; j < receivers.length; ++j) {
-    if (receivers[j][0].ID === receiverID) {
-      for (var i = 0; i < receivers[j][0].preferenceList.length; ++i) {
-        if (receivers[j][0].preferenceList[i] === proposerID) {
-          return i;
-        }
-      }
-    }
-  }
-  return -1;
+  var receiverToFind = getRecWithPrefInd(receiverID);
+  var searchedIndex = getFoundRecPrefInd(receiverToFind, proposerID);
+  return searchedIndex;
 }
 
 function checkEngagementsList(currentCandidate) {
@@ -120,16 +125,20 @@ function unengageproposer(proposerID) {
   incrementCurrentCandidateIndex(proposerID);
 }
 
+function getCandidateToUnengage(current) {
+  var candToFind = engagements.filter(function(engagement) {
+    return engagement[0].receiverID === current;
+  });
+  return candToFind[0];
+}
+
 function reEngage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
-  for (var j = 0; j < engagements.length; ++j) {
-    if (engagements[j][0].receiverID === currentCandidate) {
-      unengageproposer(engagements[j][0].proposerID);
-      engagements[j][0].proposerID = proposerID;
-      engagements[j][0].proposerPreferenceAt = currentCandidateIndex;
-      engagements[j][0].receiverPreferenceAt = receiverPreferredIndex;
-      break;
-    }
-  }
+  var toReEngage = getCandidateToUnengage(currentCandidate);
+  unengageproposer(toReEngage[0].proposerID);
+  toReEngage[0].proposerID = proposerID;
+  toReEngage[0].proposerPreferenceAt = currentCandidateIndex;
+  toReEngage[0].receiverPreferenceAt = receiverPreferredIndex;
+  return;
 }
 
 function engage(proposerID, currentCandidateIndex, currentCandidate, receiverPreferredIndex) {
