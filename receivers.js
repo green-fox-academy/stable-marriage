@@ -16,12 +16,6 @@ var receivers = [
       "name": "cirkusz",
       "priority_list": [4, 1, 2, 3],
       "participants_number": 1
-    },
-    {
-      "id": 4,
-      "name": "mozi",
-      "priority_list": [4, 1, 2, 3],
-      "participants_number": 1
     }
 ]
 
