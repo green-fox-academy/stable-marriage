@@ -39,14 +39,14 @@ function createReceivers(){
 
 createReceivers()
 
-function createUnengagedproposers() {
+function createUnengagedproposers(proposers) {
   for (var i = 0; i < proposers.length; ++i) {
     unengagedproposers.push(createOneItemList(proposers[i][0].ID));
   }
   return unengagedproposers;
 };
 
-createUnengagedproposers();
+createUnengagedproposers(proposers);
 
 function createNextCandidateIndex() {
   for (var i = 0; i < proposers.length; ++i) {
@@ -174,3 +174,23 @@ function solution () {
 };
 
 solution();
+
+module.exports = {
+  createOneItemList: createOneItemList,
+  createTwoItemsList: createTwoItemsList,
+  createIndexedItems: createIndexedItems,
+  createFourItemsList: createFourItemsList,
+  isUnengagedproposerLeft: isUnengagedproposerLeft,
+  getCurrentUnengagedproposer: getCurrentUnengagedproposer,
+  getCurrentCandidateIndex: getCurrentCandidateIndex,
+  incrementCurrentCandidateIndex: incrementCurrentCandidateIndex,
+  getCurrentCandidate: getCurrentCandidate,
+  getreceiverPreferredIndex: getreceiverPreferredIndex,
+  isEngaged: isEngaged,
+  getMarriedreceiverIndex: getMarriedreceiverIndex,
+  unengageproposer: unengageproposer,
+  reEngage: reEngage,
+  engage: engage,
+  solution: solution,
+  createUnengagedproposers: createUnengagedproposers
+}
